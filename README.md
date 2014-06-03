@@ -100,6 +100,23 @@ grunt.initConfig({
 
 Since tail runs till you send it a shutdown signal, you would like to stream the output to your stdio.
 
+#### Progress indeicator
+
+If you have long running tasks, you can turn on a "progress" indicator where '.' will be spit out on task stdout to let you know work is being accomplished
+
+```javascript
+grunt.initConfig({
+  stream: {
+    options: {
+      progress: true
+    },
+    tasks: [{ cmd: 'tail', args: ['-f', '/var/log/system.log']}]
+  }
+});
+```
+
+Progress indicator does not output anything if stream == true
+
 #### Only Using Grunt
 
 If you are only going to delegate to other grunt tasks you can simply put `grunt: true` in your tasks configuration and grunt-parallel will run them all using grunt.
