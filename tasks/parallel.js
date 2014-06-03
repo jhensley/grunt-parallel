@@ -13,7 +13,7 @@ module.exports = function(grunt) {
   function spawn(task) {
     var deferred = Q.defer();
 
-    grunt.util.spawn(task, function(error, result, code) {
+    var spawn = grunt.util.spawn(task, function(error, result, code) {
       grunt.log.writeln();
       lpad.stdout('    ');
 
@@ -31,6 +31,11 @@ module.exports = function(grunt) {
 
       deferred.resolve();
     });
+    if (!task.stream && task.progress) {
+      spawn.stdout.on('data', function (data) {
+        grunt.log.write('.');
+      });
+    }
 
     return deferred.promise;
   }
@@ -39,6 +44,7 @@ module.exports = function(grunt) {
     var done = this.async();
     var options = this.options({
       grunt: false,
+      progress: false,
       stream: false
     });
     var flags = grunt.option.flags();
@@ -63,9 +69,11 @@ module.exports = function(grunt) {
 
       // Pipe to the parent stdout when streaming.
       if ( task.stream || ( task.stream === undefined && options.stream ) ) {
+        task.stream = true;
         task.opts = task.opts || {};
         task.opts.stdio = 'inherit';
       }
+      task.progress = task.progress || (task.progress === undefined && options.progress);
 
       return task;
     });
