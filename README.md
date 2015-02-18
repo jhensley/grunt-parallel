@@ -100,7 +100,7 @@ grunt.initConfig({
 
 Since tail runs till you send it a shutdown signal, you would like to stream the output to your stdio.
 
-#### Progress indeicator
+#### Progress indicator
 
 If you have long running tasks, you can turn on a "progress" indicator where '.' will be spit out on task stdout to let you know work is being accomplished
 
